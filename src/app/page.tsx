@@ -1,65 +1,205 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import confetti from "canvas-confetti";
+
+// Component Imports
+import HookSection from "@/components/HookSection";
+import IntroSlide from "@/components/IntroSlide";
+import StatsSlide from "@/components/StatsSlide";
+import LoveSlide from "@/components/LoveSlide";
+import Dashboard from "@/components/Dashboard"; // <--- NEW IMPORT
+
+// --- CONFIGURATION ---
+const SLIDES = [
+  { id: "intro", bg: "/bg-video.mp4", audio: "/music-intro.mp3" },
+  { id: "stats", bg: "/bg-stats.mp4", audio: "/music-stats.mp3" },
+  { id: "love", bg: "/bg-love.mp4", audio: "/music-love.mp3" },
+];
 
 export default function Home() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [data, setData] = useState<any>(null);
+  const [stage, setStage] = useState("loading"); // loading -> ready -> hook -> slides -> dashboard
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  // 1. DATA LOADING & ASSET PRELOADING
+  useEffect(() => {
+    // Fetch Data
+    fetch("/data.json")
+      .then((res) => res.json())
+      .then((jsonData) => {
+        setTimeout(() => {
+          setData(jsonData);
+          setStage("ready");
+        }, 1500);
+      })
+      .catch((err) => console.error("Error loading data:", err));
+
+    // Speed Boost: Preload Videos
+    SLIDES.forEach((slide) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'video';
+      link.href = slide.bg;
+      document.head.appendChild(link);
+
+      // Aggressive Fetch
+      fetch(slide.bg).then(() => console.log("Preloaded:", slide.bg));
+    });
+  }, []);
+
+  // 2. AUDIO ENGINE
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    let targetSrc = "";
+    if (stage === "hook") targetSrc = SLIDES[0].audio;
+    if (stage === "slides") targetSrc = SLIDES[currentSlide].audio;
+    // Note: If stage is "dashboard", targetSrc is empty, so music keeps playing (or you can set specific dashboard music here)
+
+    if (!targetSrc) return;
+    const currentSrc = audio.getAttribute("src");
+
+    const fadeDuration = (stage === "hook") ? 5000 : 1000;
+
+    if (currentSrc !== targetSrc) {
+      const fadeOut = setInterval(() => {
+        if (audio.volume > 0.05) {
+          audio.volume -= 0.05;
+        } else {
+          clearInterval(fadeOut);
+          audio.pause();
+          audio.src = targetSrc;
+          audio.load();
+          audio.play().then(() => {
+            const fadeIn = setInterval(() => {
+              if (audio.volume < 0.9) {
+                audio.volume += 0.05;
+              } else {
+                clearInterval(fadeIn);
+              }
+            }, fadeDuration / 20);
+          }).catch(() => console.warn("Audio file missing:", targetSrc));
+        }
+      }, 50);
+    }
+  }, [stage, currentSlide]);
+
+  const handleStart = () => {
+    confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 }, colors: ['#22c55e', '#ffffff', '#ff0000'] });
+    setStage("hook");
+  };
+
+  // --- CHANGED: LOGIC TO SWITCH TO DASHBOARD ---
+  const nextSlide = () => {
+    if (currentSlide < SLIDES.length - 1) {
+      setCurrentSlide((prev) => prev + 1);
+    } else {
+      console.log("Wrapping finished. Welcome Home.");
+      setStage("dashboard"); // <--- Switches the view to the Dashboard
+    }
+  };
+
+  // HELPER: Decide which video to show
+  // Only show video during the 'cinematic' stages. Hide it for Dashboard.
+  const activeVideo = (stage === "hook" || stage === "slides")
+    ? (stage === "hook" ? SLIDES[0].bg : SLIDES[currentSlide].bg)
+    : "";
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="flex h-screen w-screen flex-col items-center justify-center relative overflow-hidden text-white bg-black font-sans">
+
+      {/* BACKGROUND VIDEO LAYER (Fades out when Dashboard starts) */}
+      <AnimatePresence mode="popLayout">
+        {activeVideo && (
+          <motion.div
+            key={activeVideo}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 2 }}
+            className="absolute inset-0 z-0"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <div className="absolute inset-0 bg-black/50 z-10" />
+            <video
+              autoPlay loop muted playsInline
+              className="w-full h-full object-cover"
+              src={activeVideo}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <audio ref={audioRef} />
+
+      {/* CONTENT LAYER */}
+      <div className="relative z-20 w-full h-full flex flex-col items-center justify-center">
+        <AnimatePresence mode="wait">
+
+          {/* LOADING */}
+          {stage === "loading" && (
+            <motion.div
+              key="loader"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="text-green-400 font-mono text-xl animate-pulse tracking-widest"
+            >
+              INITIALIZING...
+            </motion.div>
+          )}
+
+          {/* START SCREEN */}
+          {stage === "ready" && (
+            <motion.div
+              key="start"
+              initial={{ scale: 0.9, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 1.1, opacity: 0, filter: "blur(20px)" }}
+              className="text-center cursor-pointer group px-4"
+              onClick={handleStart}
+            >
+              <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-12 md:p-16 rounded-3xl hover:bg-black/50 transition-all duration-500 shadow-2xl ring-1 ring-white/20">
+                <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-6 text-transparent bg-clip-text bg-gradient-to-br from-green-400 via-emerald-500 to-teal-700 glitch-effect">
+                  PLAY
+                </h1>
+                <p className="text-gray-300 text-xl uppercase tracking-[0.4em] group-hover:text-white transition-colors">
+                  Our Story
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {/* CINEMATIC STAGES */}
+          {stage === "hook" && data && (
+            <HookSection data={data} onComplete={() => setStage("slides")} />
+          )}
+
+          {stage === "slides" && data && (
+            <>
+              {SLIDES[currentSlide].id === "intro" && <IntroSlide data={data} onNext={nextSlide} />}
+              {SLIDES[currentSlide].id === "stats" && <StatsSlide data={data} onNext={nextSlide} />}
+              {SLIDES[currentSlide].id === "love" && <LoveSlide data={data} onNext={nextSlide} />}
+            </>
+          )}
+
+          {/* --- NEW: THE DASHBOARD --- */}
+          {stage === "dashboard" && data && (
+            <motion.div
+              key="dashboard"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1 }}
+              className="absolute inset-0 z-50 bg-black w-full h-full"
+            >
+              <Dashboard data={data} />
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+      </div>
+    </main>
   );
 }
