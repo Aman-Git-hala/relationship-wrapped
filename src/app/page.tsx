@@ -9,10 +9,10 @@ import HookSection from "@/components/HookSection";
 import IntroSlide from "@/components/IntroSlide";
 import StatsSlide from "@/components/StatsSlide";
 import LoveSlide from "@/components/LoveSlide";
-import Dashboard from "@/components/Dashboard"; // <--- NEW IMPORT
+import Dashboard from "@/components/Dashboard";
 
-// --- CONFIGURATION ---
-const SLIDES = [
+// --- CONFIGURATION (Initial Paths) ---
+const INITIAL_SLIDES = [
   { id: "intro", bg: "/bg-video.mp4", audio: "/music-intro.mp3" },
   { id: "stats", bg: "/bg-stats.mp4", audio: "/music-stats.mp3" },
   { id: "love", bg: "/bg-love.mp4", audio: "/music-love.mp3" },
@@ -21,35 +21,87 @@ const SLIDES = [
 export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any>(null);
-  const [stage, setStage] = useState("loading"); // loading -> ready -> hook -> slides -> dashboard
+
+  // Stages: loading -> ready -> hook -> slides -> dashboard
+  const [stage, setStage] = useState("loading");
+  const [loadingProgress, setLoadingProgress] = useState(0); // 0 to 100
+
+  // Asset Management
+  const [loadedAssets, setLoadedAssets] = useState<Record<string, string>>({});
   const [currentSlide, setCurrentSlide] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // 1. DATA LOADING & ASSET PRELOADING
+  // 1. ASSET LOADER ENGINE
   useEffect(() => {
-    // Fetch Data
+    // 1. Load Data
     fetch("/data.json")
       .then((res) => res.json())
-      .then((jsonData) => {
-        setTimeout(() => {
-          setData(jsonData);
-          setStage("ready");
-        }, 1500);
-      })
+      .then((jsonData) => setData(jsonData))
       .catch((err) => console.error("Error loading data:", err));
 
-    // Speed Boost: Preload Videos
-    SLIDES.forEach((slide) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'video';
-      link.href = slide.bg;
-      document.head.appendChild(link);
+    // 2. Define Assets to Download (High Priority)
+    const assetsToLoad = [
+      "/bg-video.mp4",      // The big intro video (50MB)
+      "/music-intro.mp3",   // Intro Music
+    ];
 
-      // Aggressive Fetch
-      fetch(slide.bg).then(() => console.log("Preloaded:", slide.bg));
-    });
+    let completed = 0;
+    const totalAssets = assetsToLoad.length;
+    // We'll track progress per file and average them for a smooth bar.
+    // Simplifying: we'll mainly track the big video progress since it dominates.
+
+    const loadFile = (url: string) => {
+      return new Promise<void>((resolve) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.responseType = "blob";
+
+        xhr.onprogress = (event) => {
+          if (event.lengthComputable) {
+            // Calculate percentage for this specific file
+            // Ideally we combine total bytes, but for simplicity let's say the Video is 90% of the work.
+            if (url.includes("mp4")) {
+              const percent = (event.loaded / event.total) * 90;
+              setLoadingProgress(Math.min(90, percent)); // Cap at 90% until done
+            }
+          }
+        };
+
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            const blob = xhr.response;
+            const objectUrl = URL.createObjectURL(blob);
+
+            setLoadedAssets((prev) => ({
+              ...prev,
+              [url]: objectUrl // Map original path -> new Blob URL
+            }));
+          }
+          completed++;
+          if (completed === totalAssets) {
+            setLoadingProgress(100);
+            setTimeout(() => setStage("ready"), 500); // Small delay for polish
+          }
+          resolve();
+        };
+
+        xhr.onerror = () => {
+          console.error("Failed to load:", url);
+          // Even if failed, we proceed to avoid locking the app
+          completed++;
+          if (completed === totalAssets) setStage("ready");
+          resolve();
+        };
+
+        xhr.send();
+      });
+    };
+
+    // Trigger Loads
+    assetsToLoad.forEach(loadFile);
+
   }, []);
+
 
   // 2. AUDIO ENGINE
   useEffect(() => {
@@ -57,63 +109,63 @@ export default function Home() {
     if (!audio) return;
 
     let targetSrc = "";
-    if (stage === "hook") targetSrc = SLIDES[0].audio;
-    if (stage === "slides") targetSrc = SLIDES[currentSlide].audio;
-    // Note: If stage is "dashboard", targetSrc is empty, so music keeps playing (or you can set specific dashboard music here)
+    // RESOLVE ASSET PATHS: Check if we have a blob URL, otherwise fallback (though preloader should catch them)
+    const getResolvedPath = (path: string) => loadedAssets[path] || path;
+
+    if (stage === "hook") targetSrc = getResolvedPath(INITIAL_SLIDES[0].audio);
+    if (stage === "slides") targetSrc = getResolvedPath(INITIAL_SLIDES[currentSlide].audio);
 
     if (!targetSrc) return;
     const currentSrc = audio.getAttribute("src");
-
     const fadeDuration = (stage === "hook") ? 5000 : 1000;
 
     if (currentSrc !== targetSrc) {
+      // Quick fade out/in logic
       const fadeOut = setInterval(() => {
-        if (audio.volume > 0.05) {
-          audio.volume -= 0.05;
-        } else {
+        if (audio.volume > 0.05) audio.volume -= 0.05;
+        else {
           clearInterval(fadeOut);
           audio.pause();
           audio.src = targetSrc;
           audio.load();
           audio.play().then(() => {
+            // Fade In
             const fadeIn = setInterval(() => {
-              if (audio.volume < 0.9) {
-                audio.volume += 0.05;
-              } else {
-                clearInterval(fadeIn);
-              }
+              if (audio.volume < 0.9) audio.volume += 0.05;
+              else clearInterval(fadeIn);
             }, fadeDuration / 20);
-          }).catch(() => console.warn("Audio file missing:", targetSrc));
+          }).catch(() => console.warn("Audio missing/blocked"));
         }
       }, 50);
     }
-  }, [stage, currentSlide]);
+  }, [stage, currentSlide, loadedAssets]);
 
   const handleStart = () => {
     confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 }, colors: ['#22c55e', '#ffffff', '#ff0000'] });
     setStage("hook");
   };
 
-  // --- CHANGED: LOGIC TO SWITCH TO DASHBOARD ---
   const nextSlide = () => {
-    if (currentSlide < SLIDES.length - 1) {
+    if (currentSlide < INITIAL_SLIDES.length - 1) {
       setCurrentSlide((prev) => prev + 1);
     } else {
-      console.log("Wrapping finished. Welcome Home.");
-      setStage("dashboard"); // <--- Switches the view to the Dashboard
+      setStage("dashboard");
     }
   };
 
-  // HELPER: Decide which video to show
-  // Only show video during the 'cinematic' stages. Hide it for Dashboard.
-  const activeVideo = (stage === "hook" || stage === "slides")
-    ? (stage === "hook" ? SLIDES[0].bg : SLIDES[currentSlide].bg)
-    : "";
+  // Resolve Video Path
+  const getActiveVideo = () => {
+    const path = (stage === "hook" || stage === "slides")
+      ? (stage === "hook" ? INITIAL_SLIDES[0].bg : INITIAL_SLIDES[currentSlide].bg)
+      : "";
+    return loadedAssets[path] || path;
+  };
+  const activeVideo = getActiveVideo();
 
   return (
     <main className="flex h-screen w-screen flex-col items-center justify-center relative overflow-hidden text-white bg-black font-sans">
 
-      {/* BACKGROUND VIDEO LAYER (Fades out when Dashboard starts) */}
+      {/* BACKGROUND VIDEO LAYER */}
       <AnimatePresence mode="popLayout">
         {activeVideo && (
           <motion.div
@@ -140,14 +192,29 @@ export default function Home() {
       <div className="relative z-20 w-full h-full flex flex-col items-center justify-center">
         <AnimatePresence mode="wait">
 
-          {/* LOADING */}
+          {/* LOADING SCREEN WITH PROGRESS BAR */}
           {stage === "loading" && (
             <motion.div
               key="loader"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="text-green-400 font-mono text-xl animate-pulse tracking-widest"
+              className="flex flex-col items-center gap-6"
             >
-              INITIALIZING...
+              <div className="w-64 h-2 bg-white/10 rounded-full overflow-hidden border border-white/5">
+                <motion.div
+                  className="h-full bg-green-500 shadow-[0_0_10px_#22c55e]"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${loadingProgress}%` }}
+                  transition={{ ease: "linear" }}
+                />
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-green-400 font-mono text-sm tracking-widest uppercase animate-pulse">
+                  Downloading Memories...
+                </span>
+                <span className="text-white/30 font-mono text-xs">
+                  {loadingProgress.toFixed(0)}%
+                </span>
+              </div>
             </motion.div>
           )}
 
@@ -179,13 +246,13 @@ export default function Home() {
 
           {stage === "slides" && data && (
             <>
-              {SLIDES[currentSlide].id === "intro" && <IntroSlide data={data} onNext={nextSlide} />}
-              {SLIDES[currentSlide].id === "stats" && <StatsSlide data={data} onNext={nextSlide} />}
-              {SLIDES[currentSlide].id === "love" && <LoveSlide data={data} onNext={nextSlide} />}
+              {INITIAL_SLIDES[currentSlide].id === "intro" && <IntroSlide data={data} onNext={nextSlide} />}
+              {INITIAL_SLIDES[currentSlide].id === "stats" && <StatsSlide data={data} onNext={nextSlide} />}
+              {INITIAL_SLIDES[currentSlide].id === "love" && <LoveSlide data={data} onNext={nextSlide} />}
             </>
           )}
 
-          {/* --- NEW: THE DASHBOARD --- */}
+          {/* DASHBOARD */}
           {stage === "dashboard" && data && (
             <motion.div
               key="dashboard"
