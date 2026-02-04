@@ -196,13 +196,15 @@ export default function Home() {
   return (
     <main className="flex h-screen w-screen flex-col items-center justify-center relative overflow-hidden text-white bg-black font-sans">
 
-      {/* FULLSCREEN TOGGLE */}
-      <button
-        onClick={toggleFullscreen}
-        className="fixed top-6 right-6 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white/50 hover:text-white hover:bg-white/20 transition-all border border-white/5"
-      >
-        {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
-      </button>
+      {/* FULLSCREEN TOGGLE - Only visible when NOT in fullscreen */}
+      {!isFullscreen && (
+        <button
+          onClick={toggleFullscreen}
+          className="absolute top-6 right-6 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white/50 hover:text-white hover:bg-white/20 transition-all border border-white/5"
+        >
+          <Maximize className="w-5 h-5" />
+        </button>
+      )}
 
       {/* BACKGROUND VIDEO LAYER */}
       <AnimatePresence mode="popLayout">
