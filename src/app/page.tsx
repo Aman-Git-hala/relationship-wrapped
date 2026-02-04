@@ -13,11 +13,19 @@ import Dashboard from "@/components/Dashboard";
 import MemoriesSlide from "@/components/MemoriesSlide";
 
 // --- CONFIGURATION (Initial Paths) ---
+// TODO: Replace these with your remote URLs (e.g., from Cloudinary, Vercel Blob, etc.)
+const VIDEO_URLS = {
+  intro: "/bg-video.mp4",
+  stats: "/bg-stats.mp4",
+  memories: "/bg-memories.mp4",
+  love: "/bg-love.mp4",
+};
+
 const INITIAL_SLIDES = [
-  { id: "intro", bg: "/bg-video.mp4", audio: "/music-intro.mp3" },
-  { id: "stats", bg: "/bg-stats.mp4", audio: "/music-stats.mp3" },
-  { id: "memories", bg: "/bg-memories.mp4", audio: "/music-memories.mp3" },
-  { id: "love", bg: "/bg-love.mp4", audio: "/music-love.mp3" },
+  { id: "intro", bg: VIDEO_URLS.intro, audio: "/music-intro.mp3" },
+  { id: "stats", bg: VIDEO_URLS.stats, audio: "/music-stats.mp3" },
+  { id: "memories", bg: VIDEO_URLS.memories, audio: "/music-memories.mp3" },
+  { id: "love", bg: VIDEO_URLS.love, audio: "/music-love.mp3" },
 ];
 
 export default function Home() {
