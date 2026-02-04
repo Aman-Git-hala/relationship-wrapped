@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Maximize, Minimize } from "lucide-react";
 import confetti from "canvas-confetti";
 
 // Component Imports
@@ -40,6 +41,23 @@ export default function Home() {
   const [loadedAssets, setLoadedAssets] = useState<Record<string, string>>({});
   const [currentSlide, setCurrentSlide] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // --- FULLSCREEN LOGIC ---
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => setIsFullscreen(true));
+    } else {
+      document.exitFullscreen().then(() => setIsFullscreen(false));
+    }
+  };
+
+  useEffect(() => {
+    const handleChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", handleChange);
+    return () => document.removeEventListener("fullscreenchange", handleChange);
+  }, []);
 
   // 1. ASSET LOADER ENGINE
   useEffect(() => {
@@ -177,6 +195,14 @@ export default function Home() {
 
   return (
     <main className="flex h-screen w-screen flex-col items-center justify-center relative overflow-hidden text-white bg-black font-sans">
+
+      {/* FULLSCREEN TOGGLE */}
+      <button
+        onClick={toggleFullscreen}
+        className="fixed top-6 right-6 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white/50 hover:text-white hover:bg-white/20 transition-all border border-white/5"
+      >
+        {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
+      </button>
 
       {/* BACKGROUND VIDEO LAYER */}
       <AnimatePresence mode="popLayout">
