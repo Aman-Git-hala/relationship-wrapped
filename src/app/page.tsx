@@ -60,6 +60,9 @@ export default function Home() {
     // We'll track progress per file and average them for a smooth bar.
     // Simplifying: we'll mainly track the big video progress since it dominates.
 
+    let completed = 0;
+    const totalAssets = assetsToLoad.length;
+
     const loadFile = (url: string) => {
       return new Promise<void>((resolve) => {
         const xhr = new XMLHttpRequest();
