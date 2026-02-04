@@ -19,8 +19,13 @@ export default function IntroSlide({ data, onNext }: { data: any, onNext: () => 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const filtered = raw.filter((m: any) => m.message && m.message.length > 20 && m.message.length < 120);
 
-        // Shuffle
-        const shuffled = filtered.sort(() => Math.random() - 0.5);
+        // Robust Shuffle: Fisher-Yates or simple sort with random
+        const shuffled = filtered
+            .map(value => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value)
+            .slice(0, 10); // Pick top 10 random
+
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setRandomMessages(shuffled);
     }, [data]);

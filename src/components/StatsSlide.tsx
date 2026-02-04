@@ -58,16 +58,46 @@ export default function StatsSlide({ data, onNext }: { data: any, onNext: () => 
     const msgsPerDay = (totalMessages / activeDays).toFixed(0);
 
     // Roast / Commentary Logic
-    let volumeComment = "A reasonable amount of talking.";
-    if (totalMessages > 10000) volumeComment = "Basically writing a novel every month.";
-    if (totalMessages > 50000) volumeComment = "Do you two ever put the phone down?";
-    if (totalMessages < 1000) volumeComment = "Quality over quantity, right?";
+    const volumeComments = [
+        "A reasonable amount of talking.",
+        "Basically writing a novel every month.",
+        "Do you two ever put the phone down?",
+        "Quality over quantity, right?",
+        "RIP to your data plan.",
+        "That's a lot of typing...",
+        "Keyboard must be on fire."
+    ];
+
+    // Pick based on thresholds but with some variety if possible, 
+    // or just pick purely random to fulfill the user request for "random each time"
+    // However, stats should somewhat reflect reality. 
+    // We'll stick to threshold-based buckets but pick randomly WITHIN the bucket.
+
+    const getVolumeComment = (total: number) => {
+        const high = ["Basically writing a novel.", "Do you ever stop?", "Phone addiction confirmed.", "Novel writers in the making."];
+        const med = ["A healthy amount of chatter.", "Keeping the connection alive.", "Solid communication stats."];
+        const low = ["Quality over quantity.", "Silent but strong.", "Less talk, more action?"];
+
+        if (total > 50000) return high[Math.floor(Math.random() * high.length)];
+        if (total > 10000) return med[Math.floor(Math.random() * med.length)];
+        return low[Math.floor(Math.random() * low.length)];
+    };
+
+    // We use useMemo nicely here so it stays consistent during re-renders, but changes on mount (if we add a dependency like Date.now() or just let it run once)
+    const volumeComment = useMemo(() => getVolumeComment(totalMessages), [totalMessages]);
 
     const nightOwls = hourlyData.filter(h => h.hour >= 0 && h.hour < 5).reduce((a, b) => a + b.count, 0);
     const nightOwlPercent = ((nightOwls / totalMessages) * 100).toFixed(1);
-    let sleepComment = "Healthy sleep schedule detected.";
-    if (Number(nightOwlPercent) > 10) sleepComment = "Who needs sleep when you have love?";
-    if (Number(nightOwlPercent) > 25) sleepComment = "Vampire couple confirmed.";
+
+    const getSleepComment = (percent: number) => {
+        const vamp = ["Vampires detected.", "Who needs sleep?", "Nocturnal lovebirds.", "Creatures of the night."];
+        const normal = ["Healthy sleep schedule.", "Early birds.", "Responsibly asleep."];
+
+        if (percent > 10) return vamp[Math.floor(Math.random() * vamp.length)];
+        return normal[Math.floor(Math.random() * normal.length)];
+    };
+
+    const sleepComment = useMemo(() => getSleepComment(Number(nightOwlPercent)), [nightOwlPercent]);
 
     // Formatting
     const formatNum = (num: number) => num > 1000 ? (num / 1000).toFixed(1) + "k" : num.toString();

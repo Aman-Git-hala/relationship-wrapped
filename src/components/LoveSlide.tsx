@@ -1,15 +1,23 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, ArrowRight } from "lucide-react";
 import confetti from "canvas-confetti";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function LoveSlide({ data, onNext }: { data: any, onNext: () => void }) {
-    const sweetTexts = data?.wrapped?.sweetest
+    // Shuffle and pick 5 random sweet messages
+    const sweetTexts = useMemo(() => {
+        if (!data?.wrapped?.sweetest) return [];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ? data.wrapped.sweetest.filter((m: any) => m.message.length > 30).slice(0, 5)
-        : [];
+        const raw = data.wrapped.sweetest.filter((m: any) => m.message.length > 30);
+
+        return raw
+            .map((value: any) => ({ value, sort: Math.random() }))
+            .sort((a: any, b: any) => a.sort - b.sort)
+            .map(({ value }: any) => value)
+            .slice(0, 5);
+    }, [data]);
 
     const [index, setIndex] = useState(0);
 
