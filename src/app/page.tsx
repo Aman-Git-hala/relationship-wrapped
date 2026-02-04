@@ -13,12 +13,12 @@ import Dashboard from "@/components/Dashboard";
 import MemoriesSlide from "@/components/MemoriesSlide";
 
 // --- CONFIGURATION (Initial Paths) ---
-// TODO: Replace these with your remote URLs (e.g., from Cloudinary, Vercel Blob, etc.)
+// Remote Cloudinary URLs
 const VIDEO_URLS = {
-  intro: "/bg-video.mp4",
-  stats: "/bg-stats.mp4",
-  memories: "/bg-memories.mp4",
-  love: "/bg-love.mp4",
+  intro: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191169/bg-video_qrb93t.mp4",
+  stats: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191110/bg-stats_yfpiuf.mp4",
+  memories: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191087/bg-memories_akettx.mp4",
+  love: "/bg-love.mp4", // Still local until provided
 };
 
 const INITIAL_SLIDES = [
@@ -51,12 +51,12 @@ export default function Home() {
 
     // 2. Define Assets to Download (High Priority)
     const assetsToLoad = [
-      "/bg-video.mp4",      // The big intro video (50MB)
-      "/music-intro.mp3",   // Intro Music
+      VIDEO_URLS.intro,
+      VIDEO_URLS.stats,
+      VIDEO_URLS.memories,
+      "/music-intro.mp3",
+      "/music-stats.mp3",
     ];
-
-    let completed = 0;
-    const totalAssets = assetsToLoad.length;
     // We'll track progress per file and average them for a smooth bar.
     // Simplifying: we'll mainly track the big video progress since it dominates.
 
