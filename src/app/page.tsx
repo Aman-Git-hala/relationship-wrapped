@@ -10,11 +10,13 @@ import IntroSlide from "@/components/IntroSlide";
 import StatsSlide from "@/components/StatsSlide";
 import LoveSlide from "@/components/LoveSlide";
 import Dashboard from "@/components/Dashboard";
+import MemoriesSlide from "@/components/MemoriesSlide";
 
 // --- CONFIGURATION (Initial Paths) ---
 const INITIAL_SLIDES = [
   { id: "intro", bg: "/bg-video.mp4", audio: "/music-intro.mp3" },
   { id: "stats", bg: "/bg-stats.mp4", audio: "/music-stats.mp3" },
+  { id: "memories", bg: "/bg-memories.mp4", audio: "/music-memories.mp3" },
   { id: "love", bg: "/bg-love.mp4", audio: "/music-love.mp3" },
 ];
 
@@ -186,7 +188,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      <audio ref={audioRef} />
+      <audio ref={audioRef} loop />
 
       {/* CONTENT LAYER */}
       <div className="relative z-20 w-full h-full flex flex-col items-center justify-center">
@@ -248,6 +250,7 @@ export default function Home() {
             <>
               {INITIAL_SLIDES[currentSlide].id === "intro" && <IntroSlide data={data} onNext={nextSlide} />}
               {INITIAL_SLIDES[currentSlide].id === "stats" && <StatsSlide data={data} onNext={nextSlide} />}
+              {INITIAL_SLIDES[currentSlide].id === "memories" && <MemoriesSlide onNext={nextSlide} />}
               {INITIAL_SLIDES[currentSlide].id === "love" && <LoveSlide data={data} onNext={nextSlide} />}
             </>
           )}
