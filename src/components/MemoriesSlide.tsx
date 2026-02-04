@@ -16,6 +16,16 @@ const TEXT_OPTIONS = [
 
 export default function MemoriesSlide({ onNext }: { onNext: () => void }) {
     const [randomText, setRandomText] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
+
+    const handleImageError = (index: number) => {
+        setFailedImages(prev => {
+            const next = new Set(prev);
+            next.add(index);
+            return next;
+        });
+    };
 
     useEffect(() => {
         const index = Math.floor(Math.random() * TEXT_OPTIONS.length);
@@ -54,30 +64,35 @@ export default function MemoriesSlide({ onNext }: { onNext: () => void }) {
                         repeatType: "loop"
                     }}
                 >
-                    {seamlessPhotos.map((src, i) => (
-                        <div
-                            key={i}
-                            className="relative group shrink-0"
-                            style={{
-                                transform: `rotate(${Math.sin(i * 1321) * 6}deg) scale(${0.8 + Math.random() * 0.2})`
-                            }}
-                        >
-                            <div className="bg-white p-2 pb-8 w-[200px] md:w-[280px] shadow-2xl transform transition-transform duration-500 group-hover:scale-110 group-hover:z-50 group-hover:rotate-0 border border-gray-200">
-                                <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative">
-                                    <img
-                                        src={src}
-                                        alt="Memory"
-                                        loading="eager"
-                                        className="w-full h-full object-cover filter sepia-[0.2] contrast-110"
-                                        onError={(e) => {
-                                            e.currentTarget.style.display = 'none';
-                                            e.currentTarget.parentElement!.style.backgroundColor = '#1a1a1a';
-                                        }}
-                                    />
+                    {seamlessPhotos.map((src, i) => {
+                        // Because seamlessPhotos duplicates the array, we map the large index back to 0-19
+                        const originalIndex = i % PHOTO_COUNT;
+
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        if (failedImages.has(originalIndex)) return null;
+
+                        return (
+                            <div
+                                key={i}
+                                className="relative group shrink-0"
+                                style={{
+                                    transform: `rotate(${Math.sin(i * 1321) * 6}deg) scale(${0.8 + Math.random() * 0.2})`
+                                }}
+                            >
+                                <div className="bg-white p-2 pb-8 w-[200px] md:w-[280px] shadow-2xl transform transition-transform duration-500 group-hover:scale-110 group-hover:z-50 group-hover:rotate-0 border border-gray-200">
+                                    <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative">
+                                        <img
+                                            src={src}
+                                            alt="Memory"
+                                            loading="eager"
+                                            className="w-full h-full object-cover filter sepia-[0.2] contrast-110"
+                                            onError={() => handleImageError(originalIndex)}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </motion.div>
             </div>
 
