@@ -10,7 +10,7 @@ export default function LoveSlide({ data, onNext }: { data: any, onNext: () => v
     const sweetTexts = useMemo(() => {
         if (!data?.wrapped?.sweetest) return [];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const raw = data.wrapped.sweetest.filter((m: any) => m.message.length > 30);
+        const raw = data.wrapped.sweetest.filter((m: any) => m.message.length > 5);
 
         return raw
             .map((value: any) => ({ value, sort: Math.random() }))

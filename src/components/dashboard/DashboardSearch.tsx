@@ -26,34 +26,29 @@ export default function DashboardSearch({ data }: { data: any }) {
     };
 
     return (
-        <div className="h-full flex flex-col gap-6">
-            <div className="relative">
-                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-white/30" />
+        <div className={`h-full flex flex-col transition-all duration-500 ${query.length === 0 ? "justify-center items-center" : "justify-start pt-0"}`}>
+
+            <div className={`w-full max-w-2xl relative transition-all duration-500 ${query.length === 0 ? "scale-110" : "scale-100"}`}>
+                <Search className={`absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 transition-colors ${query.length === 0 ? "text-white/50" : "text-white/30"}`} />
                 <input
                     type="text"
                     placeholder="Search your history..."
                     value={query}
                     onChange={handleSearch}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-6 pl-16 pr-6 text-white text-xl focus:outline-none focus:bg-white/10 transition-colors placeholder:text-white/20"
+                    className="w-full bg-white/5 rounded-2xl py-6 pl-16 pr-6 text-white text-xl focus:outline-none focus:bg-white/10 transition-colors placeholder:text-white/20 shadow-2xl"
                     autoFocus
                 />
             </div>
 
-            <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+            <div className={`flex-1 w-full max-w-2xl overflow-y-auto custom-scrollbar relative z-10 transition-opacity duration-500 ${query.length === 0 ? "opacity-0 h-0 flex-none" : "opacity-100 mt-6"}`}>
                 {query.length > 0 && results.length === 0 && (
                     <div className="text-center text-white/30 py-20">
                         <p>No memories found for &quot;{query}&quot;</p>
                     </div>
                 )}
 
-                {query.length === 0 && (
-                    <div className="text-center text-white/30 py-20">
-                        <p>Type to travel back in time...</p>
-                    </div>
-                )}
-
                 {results.map((msg, idx) => (
-                    <div key={idx} className="bg-white/5 p-6 rounded-2xl border border-white/5 hover:border-white/10 transition group">
+                    <div key={idx} className="bg-white/5 p-6 rounded-2xl hover:bg-white/10 transition group mb-4">
                         <div className="flex justify-between items-start mb-2">
                             <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "aman" ? "text-blue-400" : "text-pink-400"}`}>
                                 {msg.sender}
@@ -75,6 +70,13 @@ export default function DashboardSearch({ data }: { data: any }) {
                     </div>
                 ))}
             </div>
+
+            {/* Helper Text when empty */}
+            {query.length === 0 && (
+                <div className="mt-6 text-white/30 font-mono text-xs uppercase tracking-[0.3em] animate-pulse absolute bottom-10 md:static">
+                    Type to travel back in time...
+                </div>
+            )}
         </div>
     );
 }

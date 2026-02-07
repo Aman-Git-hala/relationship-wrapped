@@ -106,8 +106,8 @@ export default function StatsSlide({ data, onNext }: { data: any, onNext: () => 
     return (
         <div className="w-full h-full bg-black/90 text-white overflow-y-auto relative py-20 px-4 md:px-8 font-mono">
 
-            {/* BACKGROUND DECOR */}
-            <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-black to-black z-0" />
+            {/* BACKGROUND DECOR - Removed Grid/Gradient as requested */}
+            {/* <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-black to-black z-0" /> */}
 
             {/* MAIN CONTAINER */}
             <div className="relative z-10 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-32">

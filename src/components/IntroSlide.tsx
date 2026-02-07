@@ -86,7 +86,7 @@ export default function IntroSlide({ data, onNext }: { data: any, onNext: () => 
                     </h2>
 
                     {/* Metadata */}
-                    <div className="mt-6 flex items-center gap-3 text-white/60 text-lg font-mono uppercase tracking-widest bg-black/40 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 shadow-xl">
+                    <div className="mt-6 flex items-center gap-3 text-white/60 text-lg font-mono uppercase tracking-widest bg-black/70 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 shadow-xl">
                         <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
                         <span>{currentMessage.timestamp?.split(" ")[0] || "Memory"}</span>
                     </div>

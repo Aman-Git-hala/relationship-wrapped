@@ -20,7 +20,7 @@ export default function DashboardGallery() {
 
     return (
         <div className="h-full overflow-y-auto custom-scrollbar">
-            <h2 className="text-3xl font-bold text-white mb-6 sticky top-0 bg-black/80 backdrop-blur-xl py-4 z-10 border-b border-white/10">The Gallery</h2>
+            <h2 className="text-3xl font-bold text-white mb-6 sticky top-0 bg-black/80 backdrop-blur-xl py-4 z-10">The Gallery</h2>
             {/* UPDATED: Increased columns to make images smaller */}
             <div className="columns-3 md:columns-4 lg:columns-5 gap-4 space-y-4">
                 {images.map((src, idx) => {

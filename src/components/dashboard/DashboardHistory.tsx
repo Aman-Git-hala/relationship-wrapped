@@ -15,12 +15,12 @@ export default function DashboardHistory({ data }: { data: any }) {
 
     return (
         <div className="h-full flex flex-col gap-6">
-            <div className="flex items-end justify-between border-b border-white/10 pb-6">
+            <div className="flex items-end justify-between pb-6">
                 <div>
                     <h2 className="text-3xl font-bold text-white mb-1">On This Day</h2>
                     <p className="text-white/50">{today.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</p>
                 </div>
-                <div className="px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400 text-xs font-bold uppercase tracking-widest">
+                <div className="px-4 py-2 bg-purple-500/10 rounded-full text-purple-400 text-xs font-bold uppercase tracking-widest">
                     {memories.length} Memories Found
                 </div>
             </div>
@@ -34,9 +34,9 @@ export default function DashboardHistory({ data }: { data: any }) {
                 ) : (
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     memories.map((msg: any, idx: number) => (
-                        <div key={idx} className="relative pl-8 border-l border-white/10 py-2">
+                        <div key={idx} className="relative pl-8 border-l border-white/5 py-2">
                             <div className="absolute -left-[5px] top-6 w-2.5 h-2.5 rounded-full bg-purple-500 box-content border-4 border-black" />
-                            <div className="bg-white/5 p-6 rounded-2xl border border-white/5 hover:bg-white/10 transition">
+                            <div className="bg-white/5 p-6 rounded-2xl hover:bg-white/10 transition">
                                 <div className="flex justify-between items-start mb-2">
                                     <span className="text-xl font-bold text-white">
                                         {new Date(msg.timestamp).getFullYear()}

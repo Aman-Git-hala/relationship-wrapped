@@ -206,6 +206,22 @@ export default function Home() {
         </button>
       )}
 
+      {/* SKIP BUTTON - Visible in hook and slides */}
+      {(stage === "hook" || stage === "slides") && (
+        <motion.button
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 20 }}
+          onClick={() => {
+            if (stage === "hook") setStage("slides");
+            else nextSlide();
+          }}
+          className="absolute top-6 right-20 z-50 px-6 py-2 bg-white/10 backdrop-blur-md rounded-full text-white/70 hover:text-white hover:bg-white/20 transition-all border border-white/5 text-xs font-bold tracking-widest uppercase"
+        >
+          SKIP
+        </motion.button>
+      )}
+
       {/* BACKGROUND VIDEO LAYER */}
       <AnimatePresence mode="popLayout">
         {activeVideo && (

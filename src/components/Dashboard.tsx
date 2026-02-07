@@ -171,11 +171,11 @@ export default function Dashboard({ data }: { data: any }) {
     return (
         <div className="min-h-screen w-full bg-black text-white font-sans flex overflow-hidden relative">
 
-            {/* 1. BACKGROUND (Subtle Animated Gradient) */}
-            <div className="absolute inset-0 z-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 animate-pulse" />
+            {/* 1. BACKGROUND (Removed Gradient) */}
+            <div className="absolute inset-0 z-0 bg-black" />
 
             {/* 2. SIDEBAR (Desktop) */}
-            <aside className="hidden md:flex w-72 h-screen z-20 flex-col bg-white/5 backdrop-blur-2xl border-r border-white/10 p-6">
+            <aside className="hidden md:flex w-72 h-screen z-20 flex-col bg-white/5 backdrop-blur-2xl p-6">
                 <div className="mb-12 flex items-center gap-4 px-2">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 to-violet-500 shadow-lg shadow-pink-500/20" />
                     <div>
