@@ -123,7 +123,7 @@ export default function StatsSlide({ data, onNext }: { data: any, onNext: () => 
                         </div>
                         <h1 className="text-5xl font-black tracking-tighter text-white mb-4">THE STATS.</h1>
                         <p className="text-white/40 text-sm">
-                            We crunched the numbers so you don&apos;t have to. Here is the raw data of your relationship.
+                            I crunched how much we love each other and such. Here is the raw data of our relationship.
                         </p>
                     </div>
 
