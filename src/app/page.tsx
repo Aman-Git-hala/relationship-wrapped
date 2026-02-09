@@ -14,6 +14,7 @@ import Dashboard from "@/components/Dashboard";
 import MemoriesSlide from "@/components/MemoriesSlide";
 import MapSlide from "@/components/MapSlide";
 import MusicSlide from "@/components/MusicSlide";
+import TimeCapsuleSlide from "@/components/TimeCapsuleSlide";
 import VHSEffect from "@/components/ui/VHSEffect";
 
 // --- CONFIGURATION (Initial Paths) ---
@@ -31,6 +32,7 @@ const INITIAL_SLIDES = [
   { id: "memories", bg: VIDEO_URLS.memories, audio: "/music-memories.mp3" },
   { id: "map", bg: VIDEO_URLS.stats, audio: "/music-stats.mp3" }, // Reusing stats bg/audio for now
   { id: "music", bg: VIDEO_URLS.memories, audio: "" }, // Handles its own audio
+  { id: "capsule", bg: VIDEO_URLS.stats, audio: "/music-stats.mp3" }, // Quiet reflection
   { id: "love", bg: VIDEO_URLS.love, audio: "/music-love.mp3" },
 ];
 
@@ -336,6 +338,7 @@ export default function Home() {
               {INITIAL_SLIDES[currentSlide].id === "memories" && <MemoriesSlide onNext={nextSlide} />}
               {INITIAL_SLIDES[currentSlide].id === "map" && <MapSlide onNext={nextSlide} />}
               {INITIAL_SLIDES[currentSlide].id === "music" && <MusicSlide onNext={nextSlide} />}
+              {INITIAL_SLIDES[currentSlide].id === "capsule" && <TimeCapsuleSlide onNext={nextSlide} />}
               {INITIAL_SLIDES[currentSlide].id === "love" && <LoveSlide data={data} onNext={nextSlide} />}
             </>
           )}
