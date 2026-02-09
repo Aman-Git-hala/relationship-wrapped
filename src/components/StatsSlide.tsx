@@ -3,6 +3,8 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Clock, TrendingUp, Activity, Heart, Moon, MessageSquare, ArrowRight } from "lucide-react";
 import { AreaChart, Area, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import CinematicText from "@/components/ui/CinematicText";
+import VibeCalendar from "@/components/VibeCalendar";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function StatsSlide({ data, onNext }: { data: any, onNext: () => void }) {
@@ -121,47 +123,47 @@ export default function StatsSlide({ data, onNext }: { data: any, onNext: () => 
                             <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
                             <span className="text-xs uppercase tracking-[0.3em] text-red-500">Live Telemetry</span>
                         </div>
-                        <h1 className="text-5xl font-black tracking-tighter text-white mb-4">THE STATS.</h1>
+                        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">THE STATS.</h1>
                         <p className="text-white/40 text-sm">
                             I crunched how much we love each other and such. Here is the raw data of our relationship.
                         </p>
                     </div>
 
                     {/* Metric 1: Volume */}
-                    <div className="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-colors">
-                        <div className="flex items-center gap-3 mb-4 text-white/50">
-                            <MessageSquare className="w-5 h-5" />
-                            <span className="text-xs uppercase tracking-widest">Total Volume</span>
+                    <div className="bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-colors">
+                        <div className="flex items-center gap-2 mb-2 text-white/50">
+                            <MessageSquare className="w-4 h-4" />
+                            <span className="text-[10px] uppercase tracking-widest">Total Volume</span>
                         </div>
-                        <div className="text-6xl font-bold text-white mb-2">{formatNum(totalMessages)}</div>
-                        <p className="text-pink-400 text-sm font-bold border-l-2 border-pink-500 pl-3 py-1">
+                        <div className="text-3xl font-bold text-white mb-1"><CinematicText text={formatNum(totalMessages)} duration={2000} delay={500} /></div>
+                        <p className="text-pink-400 text-xs font-medium border-l-2 border-pink-500 pl-2 py-0.5">
                             &quot;{volumeComment}&quot;
                         </p>
                     </div>
 
                     {/* Metric 2: Daily Average */}
-                    <div className="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-colors">
-                        <div className="flex items-center gap-3 mb-4 text-white/50">
-                            <Activity className="w-5 h-5" />
-                            <span className="text-xs uppercase tracking-widest">Intensity</span>
+                    <div className="bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-colors">
+                        <div className="flex items-center gap-2 mb-2 text-white/50">
+                            <Activity className="w-4 h-4" />
+                            <span className="text-[10px] uppercase tracking-widest">Intensity</span>
                         </div>
                         <div className="flex items-baseline gap-2">
-                            <div className="text-5xl font-bold text-white mb-2">{msgsPerDay}</div>
-                            <span className="text-white/40 text-sm">msgs/day</span>
+                            <div className="text-2xl font-bold text-white mb-1"><CinematicText text={msgsPerDay} duration={2000} delay={800} /></div>
+                            <span className="text-white/40 text-xs">msgs/day</span>
                         </div>
-                        <p className="text-purple-400 text-sm italic">
+                        <p className="text-purple-400 text-xs italic">
                             Consistency is key.
                         </p>
                     </div>
 
                     {/* Metric 3: Night Owl */}
-                    <div className="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-colors">
-                        <div className="flex items-center gap-3 mb-4 text-white/50">
-                            <Moon className="w-5 h-5" />
-                            <span className="text-xs uppercase tracking-widest">Nocturnal Index</span>
+                    <div className="bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-colors">
+                        <div className="flex items-center gap-2 mb-2 text-white/50">
+                            <Moon className="w-4 h-4" />
+                            <span className="text-[10px] uppercase tracking-widest">Nocturnal Index</span>
                         </div>
-                        <div className="text-5xl font-bold text-white mb-2">{nightOwlPercent}%</div>
-                        <p className="text-blue-400 text-sm font-bold border-l-2 border-blue-500 pl-3 py-1">
+                        <div className="text-2xl font-bold text-white mb-1"><CinematicText text={`${nightOwlPercent}%`} duration={2500} delay={1200} /></div>
+                        <p className="text-blue-400 text-xs font-medium border-l-2 border-blue-500 pl-2 py-0.5">
                             &quot;{sleepComment}&quot;
                         </p>
                     </div>
@@ -242,6 +244,15 @@ export default function StatsSlide({ data, onNext }: { data: any, onNext: () => 
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+                    {/* Chart 4: Vibe Calendar */}
+                    <div className="bg-black/40 backdrop-blur-md border border-white/10 p-6 rounded-3xl overflow-hidden">
+                        <div className="mb-6 flex justify-between items-center">
+                            <h3 className="text-sm font-bold uppercase tracking-widest text-white/80">Consistency Streak</h3>
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        </div>
+                        <VibeCalendar data={messages} />
                     </div>
 
                 </div>

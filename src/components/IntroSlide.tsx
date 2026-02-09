@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart } from "lucide-react";
+import CinematicText from "@/components/ui/CinematicText";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function IntroSlide({ data, onNext }: { data: any, onNext: () => void }) {
@@ -80,9 +81,9 @@ export default function IntroSlide({ data, onNext }: { data: any, onNext: () => 
                     className="absolute max-w-[80vw] w-max -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none"
                     style={{ transform: 'translate(-50%, -50%)' }} // Centering fix works best with CSS transform
                 >
-                    {/* The Message: HUGE & BOLD */}
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] font-serif italic text-center whitespace-pre-wrap">
-                        &quot;{currentMessage.message}&quot;
+                    {/* The Message: Normal Size */}
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-white/90 leading-relaxed drop-shadow-md font-serif italic text-center whitespace-pre-wrap max-w-4xl">
+                        <CinematicText text={`"${currentMessage.message}"`} duration={1500} />
                     </h2>
 
                     {/* Metadata */}

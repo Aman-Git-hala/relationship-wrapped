@@ -32,76 +32,119 @@ export default function MemoriesSlide({ onNext }: { onNext: () => void }) {
         setRandomText(TEXT_OPTIONS[index]);
     }, []);
 
-    const seamlessPhotos = useMemo(() => [...PHOTOS, ...PHOTOS, ...PHOTOS, ...PHOTOS], []);
+    // Duplicate photos for infinite scroll effect
+    const filmStripPhotos = useMemo(() => [...PHOTOS, ...PHOTOS], []);
 
     return (
-        <div className="relative w-full h-full flex flex-col items-center justify-between py-12 md:py-20 overflow-hidden bg-transparent z-30">
+        <div className="relative w-full h-full flex flex-col items-center justify-between overflow-hidden bg-black z-30">
+
+            {/* FILM STRIPS CONTAINER */}
+            <div className="absolute inset-0 flex justify-center gap-4 md:gap-12 pointer-events-none opacity-80">
+                {/* Left Strip (Moving Up) */}
+                <div className="relative w-[120px] md:w-[240px] h-full overflow-hidden border-x-[6px] border-black bg-[#1a1a1a] flex flex-col">
+                    {/* Perforations */}
+                    <div className="absolute top-0 left-0 w-3 h-full flex flex-col gap-2 z-10">
+                        {Array.from({ length: 50 }).map((_, i) => (
+                            <div key={i} className="w-1.5 h-2 bg-black rounded-sm mx-auto" />
+                        ))}
+                    </div>
+                    <div className="absolute top-0 right-0 w-3 h-full flex flex-col gap-2 z-10">
+                        {Array.from({ length: 50 }).map((_, i) => (
+                            <div key={i} className="w-1.5 h-2 bg-black rounded-sm mx-auto" />
+                        ))}
+                    </div>
+
+                    <motion.div
+                        className="flex flex-col gap-3 py-4"
+                        animate={{ y: "-50%" }}
+                        transition={{ ease: "linear", duration: 40, repeat: Infinity }}
+                    >
+                        {filmStripPhotos.map((src, i) => {
+                            const originalIndex = i % PHOTO_COUNT;
+                            if (failedImages.has(originalIndex)) return null;
+                            return (
+                                <div key={i} className="relative w-full aspect-[3/4] px-4 py-2">
+                                    <div className="w-full h-full bg-black overflow-hidden relative border border-white/10">
+                                        <img
+                                            src={src}
+                                            alt="Memory"
+                                            className="w-full h-full object-cover filter sepia-[0.3] contrast-125"
+                                            onError={() => handleImageError(originalIndex)}
+                                        />
+                                        <div className="absolute bottom-2 right-2 text-[8px] font-mono text-white/50 bg-black/50 px-1">
+                                            {1000 + originalIndex}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </motion.div>
+                </div>
+
+                {/* Right Strip (Moving Down) - Hidden on small screens if too crowded, or just showing two strips */}
+                <div className="hidden md:flex relative w-[240px] h-full overflow-hidden border-x-[6px] border-black bg-[#1a1a1a] flex-col">
+                    {/* Perforations */}
+                    <div className="absolute top-0 left-0 w-4 h-full flex flex-col gap-2 z-10">
+                        {Array.from({ length: 50 }).map((_, i) => (
+                            <div key={i} className="w-2 h-3 bg-black rounded-sm mx-auto" />
+                        ))}
+                    </div>
+                    <div className="absolute top-0 right-0 w-4 h-full flex flex-col gap-2 z-10">
+                        {Array.from({ length: 50 }).map((_, i) => (
+                            <div key={i} className="w-2 h-3 bg-black rounded-sm mx-auto" />
+                        ))}
+                    </div>
+
+                    <motion.div
+                        className="flex flex-col gap-4 py-4"
+                        initial={{ y: "-50%" }}
+                        animate={{ y: "0%" }}
+                        transition={{ ease: "linear", duration: 45, repeat: Infinity }}
+                    >
+                        {filmStripPhotos.map((src, i) => {
+                            const originalIndex = i % PHOTO_COUNT;
+                            if (failedImages.has(originalIndex)) return null;
+                            return (
+                                <div key={i} className="relative w-full aspect-[3/4] px-5 py-2">
+                                    <div className="w-full h-full bg-black overflow-hidden relative border-2 border-white/10">
+                                        <img
+                                            src={src}
+                                            alt="Memory"
+                                            className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-500"
+                                            onError={() => handleImageError(originalIndex)}
+                                        />
+                                        <div className="absolute bottom-2 right-2 text-[8px] font-mono text-white/50 bg-black/50 px-1">
+                                            {2000 + originalIndex}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </motion.div>
+                </div>
+            </div>
 
             {/* HEADER - Fixed at Top */}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.5 }}
-                className="text-center z-40 relative mt-4"
+                className="text-center z-40 relative mt-4 bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/10 shadow-2xl"
             >
-                <h2 className="text-4xl md:text-7xl font-black text-white tracking-widest uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                <h2 className="text-3xl font-black text-white tracking-widest uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
                     Flashback
                 </h2>
-                <p className="text-white/60 text-xs md:text-sm tracking-[0.5em] mt-2 font-mono">
+                <p className="text-white/60 text-[10px] md:text-xs tracking-[0.3em] mt-2 font-mono">
                     ARCHIVE_2024_2025 // ENCRYPTED
                 </p>
             </motion.div>
-
-            {/* MARQUEE TAPE - Centered */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full h-[50vh] flex items-center z-10 -rotate-2 mix-blend-screen opacity-90">
-                <motion.div
-                    className="flex gap-12 pl-12 min-w-max"
-                    animate={{ x: "-25%" }}
-                    transition={{
-                        ease: "linear",
-                        duration: 40,
-                        repeat: Infinity,
-                        repeatType: "loop"
-                    }}
-                >
-                    {seamlessPhotos.map((src, i) => {
-                        // Because seamlessPhotos duplicates the array, we map the large index back to 0-19
-                        const originalIndex = i % PHOTO_COUNT;
-
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        if (failedImages.has(originalIndex)) return null;
-
-                        return (
-                            <div
-                                key={i}
-                                className="relative group shrink-0"
-                                style={{
-                                    transform: `rotate(${Math.sin(i * 1321) * 6}deg) scale(${0.8 + Math.random() * 0.2})`
-                                }}
-                            >
-                                <div className="bg-white p-2 pb-8 w-[200px] md:w-[280px] shadow-2xl transform transition-transform duration-500 group-hover:scale-110 group-hover:z-50 group-hover:rotate-0 border border-gray-200">
-                                    <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative">
-                                        <img
-                                            src={src}
-                                            alt="Memory"
-                                            loading="eager"
-                                            className="w-full h-full object-cover filter sepia-[0.2] contrast-110"
-                                            onError={() => handleImageError(originalIndex)}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </motion.div>
-            </div>
 
             {/* FOOTER - Fixed at Bottom */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 1 }}
-                className="z-40 text-center w-[90%] max-w-2xl bg-black/60 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 shadow-2xl mb-8"
+                className="z-40 text-center w-[90%] max-w-2xl bg-black/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 shadow-2xl mb-8"
             >
                 <div className="flex flex-col gap-4">
                     <p className="text-gray-300 text-sm md:text-lg font-medium leading-relaxed font-sans opacity-90">

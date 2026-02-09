@@ -12,6 +12,9 @@ import StatsSlide from "@/components/StatsSlide";
 import LoveSlide from "@/components/LoveSlide";
 import Dashboard from "@/components/Dashboard";
 import MemoriesSlide from "@/components/MemoriesSlide";
+import MapSlide from "@/components/MapSlide";
+import MusicSlide from "@/components/MusicSlide";
+import VHSEffect from "@/components/ui/VHSEffect";
 
 // --- CONFIGURATION (Initial Paths) ---
 // Remote Cloudinary URLs
@@ -26,6 +29,8 @@ const INITIAL_SLIDES = [
   { id: "intro", bg: VIDEO_URLS.intro, audio: "/music-intro.mp3" },
   { id: "stats", bg: VIDEO_URLS.stats, audio: "/music-stats.mp3" },
   { id: "memories", bg: VIDEO_URLS.memories, audio: "/music-memories.mp3" },
+  { id: "map", bg: VIDEO_URLS.stats, audio: "/music-stats.mp3" }, // Reusing stats bg/audio for now
+  { id: "music", bg: VIDEO_URLS.memories, audio: "" }, // Handles its own audio
   { id: "love", bg: VIDEO_URLS.love, audio: "/music-love.mp3" },
 ];
 
@@ -144,11 +149,28 @@ export default function Home() {
     const getResolvedPath = (path: string) => loadedAssets[path] || path;
 
     if (stage === "hook") targetSrc = getResolvedPath(INITIAL_SLIDES[0].audio);
-    if (stage === "slides") targetSrc = getResolvedPath(INITIAL_SLIDES[currentSlide].audio);
+    if (stage === "slides") {
+      const slideAudio = INITIAL_SLIDES[currentSlide].audio;
+      if (slideAudio) targetSrc = getResolvedPath(slideAudio);
+    }
 
-    if (!targetSrc) return;
     const currentSrc = audio.getAttribute("src");
     const fadeDuration = (stage === "hook") ? 5000 : 1000;
+
+    if (!targetSrc) {
+      // If we want silence (e.g. MusicSlide handles its own audio), fade out and pause
+      if (!audio.paused) {
+        const fadeOut = setInterval(() => {
+          if (audio.volume > 0.05) audio.volume -= 0.05;
+          else {
+            clearInterval(fadeOut);
+            audio.pause();
+            audio.src = ""; // Clear src
+          }
+        }, 50);
+      }
+      return;
+    }
 
     if (currentSrc !== targetSrc) {
       // Quick fade out/in logic
@@ -195,6 +217,12 @@ export default function Home() {
 
   return (
     <main className="flex h-screen w-screen flex-col items-center justify-center relative overflow-hidden text-white bg-black font-sans">
+
+      {/* 0. VHS OVERLAY (Global) */}
+      <VHSEffect
+        active={true}
+        intensity={stage === "loading" ? "high" : stage === "hook" ? "medium" : "low"}
+      />
 
       {/* FULLSCREEN TOGGLE - Only visible when NOT in fullscreen */}
       {!isFullscreen && (
@@ -306,6 +334,8 @@ export default function Home() {
               {INITIAL_SLIDES[currentSlide].id === "intro" && <IntroSlide data={data} onNext={nextSlide} />}
               {INITIAL_SLIDES[currentSlide].id === "stats" && <StatsSlide data={data} onNext={nextSlide} />}
               {INITIAL_SLIDES[currentSlide].id === "memories" && <MemoriesSlide onNext={nextSlide} />}
+              {INITIAL_SLIDES[currentSlide].id === "map" && <MapSlide onNext={nextSlide} />}
+              {INITIAL_SLIDES[currentSlide].id === "music" && <MusicSlide onNext={nextSlide} />}
               {INITIAL_SLIDES[currentSlide].id === "love" && <LoveSlide data={data} onNext={nextSlide} />}
             </>
           )}
