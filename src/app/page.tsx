@@ -16,6 +16,7 @@ import MapSlide from "@/components/MapSlide";
 import MusicSlide from "@/components/MusicSlide";
 import TimeCapsuleSlide from "@/components/TimeCapsuleSlide";
 import VHSEffect from "@/components/ui/VHSEffect";
+import PasswordScreen from "@/components/PasswordScreen";
 
 // --- CONFIGURATION (Initial Paths) ---
 // Remote Cloudinary URLs
@@ -40,9 +41,10 @@ export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any>(null);
 
-  // Stages: loading -> ready -> hook -> slides -> dashboard
-  const [stage, setStage] = useState("loading");
+  // Stages: password -> loading -> ready -> hook -> slides -> dashboard
+  const [stage, setStage] = useState("password");
   const [loadingProgress, setLoadingProgress] = useState(0); // 0 to 100
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
 
   // Asset Management
   const [loadedAssets, setLoadedAssets] = useState<Record<string, string>>({});
@@ -118,7 +120,7 @@ export default function Home() {
           completed++;
           if (completed === totalAssets) {
             setLoadingProgress(100);
-            setTimeout(() => setStage("ready"), 500); // Small delay for polish
+            setAssetsLoaded(true);
           }
           resolve();
         };
@@ -127,7 +129,7 @@ export default function Home() {
           console.error("Failed to load:", url);
           // Even if failed, we proceed to avoid locking the app
           completed++;
-          if (completed === totalAssets) setStage("ready");
+          if (completed === totalAssets) setAssetsLoaded(true);
           resolve();
         };
 
@@ -139,6 +141,13 @@ export default function Home() {
     assetsToLoad.forEach(loadFile);
 
   }, []);
+
+  // Transition from Loading to Ready when assets are done AND we are in loading stage
+  useEffect(() => {
+    if (stage === "loading" && assetsLoaded) {
+      setTimeout(() => setStage("ready"), 500);
+    }
+  }, [stage, assetsLoaded]);
 
 
   // 2. AUDIO ENGINE
@@ -278,6 +287,11 @@ export default function Home() {
       {/* CONTENT LAYER */}
       <div className="relative z-20 w-full h-full flex flex-col items-center justify-center">
         <AnimatePresence mode="wait">
+
+          {/* PASSWORD SCREEN */}
+          {stage === "password" && (
+            <PasswordScreen key="password" onSuccess={() => setStage("loading")} />
+          )}
 
           {/* LOADING SCREEN WITH PROGRESS BAR */}
           {stage === "loading" && (
