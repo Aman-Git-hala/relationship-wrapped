@@ -1,5 +1,5 @@
 # relationship wrapped
-
+PASSWORD, WITH THE DUMMY DATA = loveyouidiot
 i made this website to show all the stats and memories from my chat history. it looks kinda like spotify wrapped but for relationships.
 
 it shows things like:
