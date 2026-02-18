@@ -1,5 +1,8 @@
 # relationship wrapped
-PASSWORD, WITH THE DUMMY DATA = loveyouidiot
+PASSWORD, WITH THE DUMMY DATA = loveyouidiot on the showable website = https://relationship-wrapped-mauve.vercel.app/
+
+
+
 i made this website to show all the stats and memories from my chat history. it looks kinda like spotify wrapped but for relationships.
 
 it shows things like:
