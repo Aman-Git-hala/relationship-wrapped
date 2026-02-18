@@ -78,7 +78,7 @@ export default function DashboardHome({ data, onChangeTab }: { data: any, onChan
                         &quot;{randomQuote.message}&quot;
                     </p>
                     <div className="flex items-center gap-3 text-white/40 text-xs uppercase tracking-widest z-10">
-                        <span className={randomQuote.sender === "aman" ? "text-blue-400 font-bold" : "text-pink-400 font-bold"}>
+                        <span className={randomQuote.sender === "Him" ? "text-blue-400 font-bold" : "text-pink-400 font-bold"}>
                             {randomQuote.sender}
                         </span>
                         <span>•</span>

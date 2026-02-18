@@ -50,7 +50,7 @@ export default function DashboardSearch({ data }: { data: any }) {
                 {results.map((msg, idx) => (
                     <div key={idx} className="bg-white/5 p-6 rounded-2xl hover:bg-white/10 transition group mb-4">
                         <div className="flex justify-between items-start mb-2">
-                            <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "aman" ? "text-blue-400" : "text-pink-400"}`}>
+                            <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "Him" ? "text-blue-400" : "text-pink-400"}`}>
                                 {msg.sender}
                             </span>
                             <span className="text-xs text-white/30 font-mono">

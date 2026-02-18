@@ -1,9 +1,30 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 
-// Placeholders for now. User needs to add images to /public/memories/1.jpg, etc.
-const PHOTO_COUNT = 20;
-const PHOTOS = Array.from({ length: PHOTO_COUNT }).map((_, i) => `/memories/${i + 1}.jpeg`);
+// Stock cute photos from Unsplash
+const PHOTOS = [
+    "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=500&q=80", // Dog
+    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&q=80", // Girl smiling
+    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80", // Portrait
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80", // Girl
+    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80", // Man
+    "https://images.unsplash.com/photo-1517423568366-eb15049696f8?w=500&q=80", // Coffee
+    "https://images.unsplash.com/photo-1516054719069-b364e6224ce1?w=500&q=80", // Cats
+    "https://images.unsplash.com/photo-1516726817505-f5ed8251b47c?w=500&q=80", // Sunset
+    "https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=500&q=80", // Couple holding hands
+    "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&q=80", // Love heart
+    "https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=500&q=80", // Flowers
+    "https://images.unsplash.com/photo-1518331483807-f64201c741e2?w=500&q=80", // Couple laughing
+    "https://images.unsplash.com/photo-1523303819875-bf7d0458a436?w=500&q=80", // Beach
+    "https://images.unsplash.com/photo-1520024146169-3240400354ae?w=500&q=80", // Fireplace/Cozy
+    "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80", // Coffee shop
+    "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=500&q=80", // Paints
+    "https://images.unsplash.com/photo-1501901609772-99547d90393c?w=500&q=80", // Starry sky
+    "https://images.unsplash.com/photo-1490750967868-58cb7506aed6?w=500&q=80", // Flowers top down
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80", // Beach
+    "https://images.unsplash.com/photo-1519681393784-d8e5b5a4570e?w=500&q=80"  // Night sky
+];
+const PHOTO_COUNT = PHOTOS.length;
 
 const TEXT_OPTIONS = [
     "So I was scrolling through our chat history last night (yes I’m that obsessive lol) and I found those messages from when we first started talking. It’s actually crazy how clueless we were. I was trying so hard to be cool and you were just being your chaotic self. I love that we didn't know yet that we were gonna be each other's entire world.",

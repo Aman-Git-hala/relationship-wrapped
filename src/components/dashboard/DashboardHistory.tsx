@@ -41,7 +41,7 @@ export default function DashboardHistory({ data }: { data: any }) {
                                     <span className="text-xl font-bold text-white">
                                         {new Date(msg.timestamp).getFullYear()}
                                     </span>
-                                    <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "aman" ? "text-blue-400" : "text-pink-400"}`}>
+                                    <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "Him" ? "text-blue-400" : "text-pink-400"}`}>
                                         {msg.sender}
                                     </span>
                                 </div>

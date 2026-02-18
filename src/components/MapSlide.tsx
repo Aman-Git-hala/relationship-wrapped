@@ -19,8 +19,8 @@ type Pin = {
 export default function MapSlide({ onNext }: { onNext: () => void }) {
     // 1. Geography Pins (Fixed Lat/Lon)
     const [geoMarkers, setGeoMarkers] = useState<{ name: string; coordinates: [number, number] }[]>([
-        { name: "ME", coordinates: [77.1025, 28.7041] }, // Delhi (Approx)
-        { name: "YOU", coordinates: [85.8312, 20.2961] }, // Bhubaneswar, Orissa
+        { name: "HERE", coordinates: [2.3522, 48.8566] }, // Paris (Generic)
+        { name: "THERE", coordinates: [-0.1276, 51.5074] }, // London (Generic)
     ]);
 
     // 2. User Pins (Click to Drop - Relative to Container)

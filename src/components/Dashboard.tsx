@@ -54,7 +54,7 @@ function SearchView({ data }: { data: any }) {
                 {results.map((msg, idx) => (
                     <div key={idx} className="bg-white/5 p-6 rounded-2xl border border-white/5 hover:border-white/10 transition group">
                         <div className="flex justify-between items-start mb-2">
-                            <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "aman" ? "text-blue-400" : "text-pink-400"}`}>
+                            <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "Him" ? "text-blue-400" : "text-pink-400"}`}>
                                 {msg.sender}
                             </span>
                             <span className="text-xs text-white/30 font-mono">
@@ -117,7 +117,7 @@ function HistoryView({ data }: { data: any }) {
                                     <span className="text-xl font-bold text-white">
                                         {new Date(msg.timestamp).getFullYear()}
                                     </span>
-                                    <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "aman" ? "text-blue-400" : "text-pink-400"}`}>
+                                    <span className={`text-xs font-bold uppercase tracking-widest ${msg.sender === "Him" ? "text-blue-400" : "text-pink-400"}`}>
                                         {msg.sender}
                                     </span>
                                 </div>
@@ -324,7 +324,7 @@ function HomeView({ data, onChangeTab }: { data: any, onChangeTab: (tab: string)
                         &quot;{randomQuote.message}&quot;
                     </p>
                     <div className="flex items-center gap-3 text-white/40 text-xs uppercase tracking-widest z-10">
-                        <span className={randomQuote.sender === "aman" ? "text-blue-400 font-bold" : "text-pink-400 font-bold"}>
+                        <span className={randomQuote.sender === "Him" ? "text-blue-400 font-bold" : "text-pink-400 font-bold"}>
                             {randomQuote.sender}
                         </span>
                         <span>•</span>

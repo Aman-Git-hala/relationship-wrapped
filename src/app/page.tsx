@@ -17,14 +17,24 @@ import MusicSlide from "@/components/MusicSlide";
 import TimeCapsuleSlide from "@/components/TimeCapsuleSlide";
 import VHSEffect from "@/components/ui/VHSEffect";
 import PasswordScreen from "@/components/PasswordScreen";
+import { fakeData } from "@/data/fakeData";
 
 // --- CONFIGURATION (Initial Paths) ---
 // Remote Cloudinary URLs
+// Remote Cloudinary URLs (ORIGINAL - COMMENTED OUT FOR SHOWCASE)
+// const VIDEO_URLS = {
+//   intro: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191169/bg-video_qrb93t.mp4",
+//   stats: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191110/bg-stats_yfpiuf.mp4",
+//   memories: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191087/bg-memories_akettx.mp4",
+//   love: "/bg-love.mp4", // Still local until provided
+// };
+
+// DUMMY VIDEO URLs (FOR SHOWCASE)
 const VIDEO_URLS = {
-  intro: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191169/bg-video_qrb93t.mp4",
-  stats: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191110/bg-stats_yfpiuf.mp4",
-  memories: "https://res.cloudinary.com/dpdflqxwr/video/upload/v1770191087/bg-memories_akettx.mp4",
-  love: "/bg-love.mp4", // Still local until provided
+  intro: "https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_25fps.mp4", // Abstract lights
+  stats: "https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4", // Particles
+  memories: "https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4", // Clouds or calm
+  love: "https://videos.pexels.com/video-files/855018/855018-hd_1920_1080_30fps.mp4", // Hearts or romantic/abstract
 };
 
 const INITIAL_SLIDES = [
@@ -70,11 +80,14 @@ export default function Home() {
 
   // 1. ASSET LOADER ENGINE
   useEffect(() => {
-    // 1. Load Data
-    fetch("/data.json")
-      .then((res) => res.json())
-      .then((jsonData) => setData(jsonData))
-      .catch((err) => console.error("Error loading data:", err));
+    // 1. Load Data (FAKE DATA MODE)
+    // fetch("/data.json")
+    //   .then((res) => res.json())
+    //   .then((jsonData) => setData(jsonData))
+    //   .catch((err) => console.error("Error loading data:", err));
+
+    // IMMEDIATE LOAD
+    setData(fakeData);
 
     // 2. Define Assets to Download (High Priority)
     const assetsToLoad = [
