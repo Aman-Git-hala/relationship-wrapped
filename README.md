@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Relationship Wrapped ❤️
 
-## Getting Started
+Transform your chat history into a beautiful, interactive "Spotify Wrapped" style experience. 
 
-First, run the development server:
+This project takes your exported WhatsApp (or other) chat data and visualizes your relationship's journey—the late-night talks, the memes, the "I love you"s, and everything in between.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- **The Stats**: See who texts more, your busiest months, and your "vibe" analysis.
+- **Time Machine**: Search through your entire history to find that one specific memory.
+- **On This Day**: Relive what happened exactly 1, 2, or 5 years ago today.
+- **The Gallery**: A curated collection of your shared photos.
+- **Interactive Map**: Pinpoint the meaningful places in your story.
+
+## 🚀 How to Make It Yours
+
+This is a template. To see *your* relationship wrapped, you'll need to feed it your data.
+
+### 1. Export Your Chat
+Export your chat history (e.g., from WhatsApp) as a `.txt` or `.json` file.
+
+### 2. Format Your Data
+The app expects a `data.json` file in the `public` folder with the following structure:
+
+```json
+{
+  "meta": {
+    "total_messages": 15000,
+    "start_date": "2023-01-01",
+    "end_date": "2024-01-01"
+  },
+  "wrapped": {
+    "sweetest": [ ... ],
+    "funniest": [ ... ],
+    "timeline": [ ... ]
+  },
+  "search_index": [
+    {
+      "timestamp": "2023-05-20 10:00:00",
+      "message": "I love you",
+      "sender": "Me"
+    }
+  ]
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+(Check `public/data.json` for the exact dummy example!)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Run It Locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Install dependencies
+npm install
 
-## Learn More
+# Run the development server
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000) and watch your story unfold.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔒 Privacy Note
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Your data stays on your machine. This is a local-first application. If you deploy it, ensure you password-protect it or keep the URL private, as it contains your personal conversation history.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Made with 💖 for love.
