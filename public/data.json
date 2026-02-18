@@ -1,0 +1,243 @@
+{
+    "meta": {
+        "total_messages": 15432,
+        "start_date": "2024-01-01 00:00:00",
+        "end_date": "2025-01-01 00:00:00"
+    },
+    "wrapped": {
+        "funniest": [
+            {
+                "timestamp": "2024-05-25 11:42:00",
+                "sender": "You",
+                "message": "Why did the chicken cross the road? To get to the other side!",
+                "time_diff": 0.0,
+                "session_id": 1,
+                "funny": 0.99,
+                "romantic": 0.01,
+                "emotion": "amusement"
+            },
+            {
+                "timestamp": "2024-06-12 14:20:00",
+                "sender": "Me",
+                "message": "I just tripped over my own foot. Need medical attention ASAP.",
+                "time_diff": 0.0,
+                "session_id": 2,
+                "funny": 0.95,
+                "romantic": 0.01,
+                "emotion": "amusement"
+            },
+            {
+                "timestamp": "2024-07-04 09:15:00",
+                "sender": "You",
+                "message": "My cat just aggressively sneezed on my face. Good morning to me.",
+                "time_diff": 0.0,
+                "session_id": 3,
+                "funny": 0.98,
+                "romantic": 0.02,
+                "emotion": "amusement"
+            },
+            {
+                "timestamp": "2024-08-01 18:30:00",
+                "sender": "Me",
+                "message": "I tried to cook pasta and set off the fire alarm. Again.",
+                "time_diff": 0.0,
+                "session_id": 4,
+                "funny": 0.97,
+                "romantic": 0.01,
+                "emotion": "amusement"
+            },
+            {
+                "timestamp": "2024-09-15 12:00:00",
+                "sender": "You",
+                "message": "Remember when you thought a pony was a baby horse? Lol.",
+                "time_diff": 0.0,
+                "session_id": 5,
+                "funny": 0.96,
+                "romantic": 0.05,
+                "emotion": "amusement"
+            }
+        ],
+        "sweetest": [
+            {
+                "timestamp": "2024-02-14 00:01:00",
+                "sender": "You",
+                "message": "You are the best thing that ever happened to me.",
+                "time_diff": 0.0,
+                "session_id": 10,
+                "funny": 0.01,
+                "romantic": 0.99,
+                "emotion": "love"
+            },
+            {
+                "timestamp": "2024-03-20 08:00:00",
+                "sender": "Me",
+                "message": "I can't wait to see you today!",
+                "time_diff": 0.0,
+                "session_id": 11,
+                "funny": 0.05,
+                "romantic": 0.95,
+                "emotion": "love"
+            },
+            {
+                "timestamp": "2024-05-10 22:30:00",
+                "sender": "You",
+                "message": "Goodnight, dream of me.",
+                "time_diff": 0.0,
+                "session_id": 12,
+                "funny": 0.02,
+                "romantic": 0.98,
+                "emotion": "love"
+            },
+            {
+                "timestamp": "2024-08-25 15:45:00",
+                "sender": "Me",
+                "message": "Thank you for being my rock.",
+                "time_diff": 0.0,
+                "session_id": 13,
+                "funny": 0.01,
+                "romantic": 0.99,
+                "emotion": "love"
+            },
+            {
+                "timestamp": "2024-11-11 11:11:00",
+                "sender": "You",
+                "message": "I wish for you forever.",
+                "time_diff": 0.0,
+                "session_id": 14,
+                "funny": 0.05,
+                "romantic": 0.99,
+                "emotion": "love"
+            }
+        ],
+        "timeline": [
+            {
+                "month_year": "2024-01",
+                "count": 1200
+            },
+            {
+                "month_year": "2024-02",
+                "count": 1500
+            },
+            {
+                "month_year": "2024-03",
+                "count": 1100
+            },
+            {
+                "month_year": "2024-04",
+                "count": 1300
+            },
+            {
+                "month_year": "2024-05",
+                "count": 1400
+            },
+            {
+                "month_year": "2024-06",
+                "count": 1600
+            },
+            {
+                "month_year": "2024-07",
+                "count": 1250
+            },
+            {
+                "month_year": "2024-08",
+                "count": 1350
+            },
+            {
+                "month_year": "2024-09",
+                "count": 1450
+            },
+            {
+                "month_year": "2024-10",
+                "count": 1550
+            },
+            {
+                "month_year": "2024-11",
+                "count": 1000
+            },
+            {
+                "month_year": "2024-12",
+                "count": 1800
+            }
+        ]
+    },
+    "search_index": [
+        {
+            "timestamp": "2024-01-01 12:00:00",
+            "message": "Happy New Year!",
+            "sender": "Me",
+            "emotion": "joy"
+        },
+        {
+            "timestamp": "2024-02-14 14:00:00",
+            "message": "Happy Valentine's Day!",
+            "sender": "You",
+            "emotion": "love"
+        },
+        {
+            "timestamp": "2024-03-15 09:00:00",
+            "message": "Did you see the news?",
+            "sender": "Me",
+            "emotion": "curiosity"
+        },
+        {
+            "timestamp": "2024-04-01 10:00:00",
+            "message": "April Fools!",
+            "sender": "You",
+            "emotion": "amusement"
+        },
+        {
+            "timestamp": "2024-05-05 18:00:00",
+            "message": "Let's get tacos.",
+            "sender": "Me",
+            "emotion": "joy"
+        },
+        {
+            "timestamp": "2024-06-20 20:00:00",
+            "message": "The sunset is beautiful.",
+            "sender": "You",
+            "emotion": "admiration"
+        },
+        {
+            "timestamp": "2024-07-04 21:00:00",
+            "message": "Fireworks!",
+            "sender": "Me",
+            "emotion": "excitement"
+        },
+        {
+            "timestamp": "2024-08-30 15:30:00",
+            "message": "I'm so tired today.",
+            "sender": "You",
+            "emotion": "fatigue"
+        },
+        {
+            "timestamp": "2024-09-10 11:15:00",
+            "message": "Check this out.",
+            "sender": "Me",
+            "emotion": "excitement"
+        },
+        {
+            "timestamp": "2024-10-31 19:45:00",
+            "message": "Happy Halloween!",
+            "sender": "You",
+            "emotion": "joy"
+        },
+        {
+            "timestamp": "2024-11-28 13:00:00",
+            "message": "Happy Thanksgiving!",
+            "sender": "Me",
+            "emotion": "gratitude"
+        },
+        {
+            "timestamp": "2024-12-25 08:00:00",
+            "message": "Merry Christmas!",
+            "sender": "You",
+            "emotion": "joy"
+        },
+        {
+            "timestamp": "2024-12-31 23:59:00",
+            "message": "See you next year!",
+            "sender": "Me",
+            "emotion": "joy"
+        }
+    ]
+}
